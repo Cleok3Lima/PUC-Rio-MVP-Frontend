@@ -89,17 +89,30 @@ function getTarefas() {
     .then((response) => response.json())
     .then((data) => {
       const tarefasList = document.getElementById("tarefas-list")
+      const completedList = document.getElementById("completed-list")
       tarefasList.innerHTML = ""
+      completedList.innerHTML = ""
       data.forEach((tarefa) => {
         const li = document.createElement("li")
         li.textContent = `${tarefa.title} - ${tarefa.description} - ${tarefa.due_date}`
 
-        const deleteButton = document.createElement("button")
-        deleteButton.textContent = "Delete"
-        deleteButton.onclick = () => deleteTarefa(tarefa.id)
+        if (tarefa.completed) {
+          li.style.textDecoration = "line-through"
+          li.style.color = "gray"
+          completedList.appendChild(li)
+        } else {
+          const completeButton = document.createElement("button")
+          completeButton.textContent = "Complete"
+          completeButton.onclick = () => completeTarefa(tarefa.id)
 
-        li.appendChild(deleteButton)
-        tarefasList.appendChild(li)
+          const deleteButton = document.createElement("button")
+          deleteButton.textContent = "Delete"
+          deleteButton.onclick = () => deleteTarefa(tarefa.id)
+
+          li.appendChild(completeButton)
+          li.appendChild(deleteButton)
+          tarefasList.appendChild(li)
+        }
       })
     })
     .catch((error) => console.error("Error:", error))
@@ -138,6 +151,33 @@ function addTarefa() {
         document.getElementById("tarefa_due_date").value = ""
       } else {
         alert("Failed to add tarefa")
+      }
+    })
+    .catch((error) => console.error("Error:", error))
+}
+
+function completeTarefa(tarefaId) {
+  console.log(`Completing tarefa with ID: ${tarefaId}`) // Log the tarefa ID being completed
+
+  fetch(`${apiUrl}/tarefas/${tarefaId}/complete`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw err
+        })
+      }
+      return response.json()
+    })
+    .then((data) => {
+      if (data.message === "Tarefa completed") {
+        getTarefas()
+      } else {
+        alert("Failed to complete tarefa")
       }
     })
     .catch((error) => console.error("Error:", error))
