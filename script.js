@@ -67,6 +67,10 @@ function register() {
     })
     .then((data) => {
       if (data.message === "User created") {
+        // Limpar os campos de registro
+        document.getElementById("reg_username").value = ""
+        document.getElementById("reg_password").value = ""
+        alert("Usuário registrado com sucesso! Agora você pode fazer login.")
         showLogin()
       } else {
         alert("Registration failed")
@@ -127,6 +131,11 @@ function addTarefa() {
     .then((data) => {
       if (data.message === "Tarefa created") {
         getTarefas()
+
+        // Limpar os campos de entrada
+        document.getElementById("tarefa_title").value = ""
+        document.getElementById("tarefa_description").value = ""
+        document.getElementById("tarefa_due_date").value = ""
       } else {
         alert("Failed to add tarefa")
       }
