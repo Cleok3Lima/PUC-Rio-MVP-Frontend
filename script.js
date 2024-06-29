@@ -89,6 +89,12 @@ function getTarefas() {
       data.forEach((tarefa) => {
         const li = document.createElement("li")
         li.textContent = `${tarefa.title} - ${tarefa.description} - ${tarefa.due_date}`
+
+        const deleteButton = document.createElement("button")
+        deleteButton.textContent = "Delete"
+        deleteButton.onclick = () => deleteTarefa(tarefa.id)
+
+        li.appendChild(deleteButton)
         tarefasList.appendChild(li)
       })
     })
@@ -123,6 +129,33 @@ function addTarefa() {
         getTarefas()
       } else {
         alert("Failed to add tarefa")
+      }
+    })
+    .catch((error) => console.error("Error:", error))
+}
+
+function deleteTarefa(tarefaId) {
+  console.log(`Deleting tarefa with ID: ${tarefaId}`) // Log the tarefa ID being deleted
+
+  fetch(`${apiUrl}/tarefas/${tarefaId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((err) => {
+          throw err
+        })
+      }
+      return response.json()
+    })
+    .then((data) => {
+      if (data.message === "Tarefa deleted") {
+        getTarefas()
+      } else {
+        alert("Failed to delete tarefa")
       }
     })
     .catch((error) => console.error("Error:", error))
