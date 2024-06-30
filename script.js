@@ -14,8 +14,6 @@ function login() {
   const username = document.getElementById("username").value
   const password = document.getElementById("password").value
 
-  console.log("Login data:", { username, password }) // Log the data being sent
-
   fetch(`${apiUrl}/login`, {
     method: "POST",
     headers: {
@@ -47,8 +45,6 @@ function login() {
 function register() {
   const username = document.getElementById("reg_username").value
   const password = document.getElementById("reg_password").value
-
-  console.log("Register data:", { username, password }) // Log the data being sent
 
   fetch(`${apiUrl}/register`, {
     method: "POST",
@@ -97,7 +93,7 @@ function getTarefas() {
         li.textContent = `${tarefa.title} - ${tarefa.description} - ${tarefa.due_date}`
 
         const deleteButton = document.createElement("button")
-        deleteButton.textContent = "Delete"
+        deleteButton.textContent = "Excluir"
         deleteButton.onclick = () => deleteTarefa(tarefa.id)
 
         if (tarefa.completed) {
@@ -107,7 +103,7 @@ function getTarefas() {
           completedList.appendChild(li)
         } else {
           const completeButton = document.createElement("button")
-          completeButton.textContent = "Complete"
+          completeButton.textContent = "Concluir"
           completeButton.onclick = () => completeTarefa(tarefa.id)
 
           li.appendChild(completeButton)
@@ -123,8 +119,6 @@ function addTarefa() {
   const title = document.getElementById("tarefa_title").value
   const description = document.getElementById("tarefa_description").value
   const due_date = document.getElementById("tarefa_due_date").value
-
-  console.log("Add Tarefa data:", { title, description, due_date }) // Log the data being sent
 
   fetch(`${apiUrl}/tarefas`, {
     method: "POST",
@@ -158,8 +152,6 @@ function addTarefa() {
 }
 
 function completeTarefa(tarefaId) {
-  console.log(`Completing tarefa with ID: ${tarefaId}`) // Log the tarefa ID being completed
-
   fetch(`${apiUrl}/tarefas/${tarefaId}/complete`, {
     method: "POST",
     headers: {
@@ -185,8 +177,6 @@ function completeTarefa(tarefaId) {
 }
 
 function deleteTarefa(tarefaId) {
-  console.log(`Deleting tarefa with ID: ${tarefaId}`) // Log the tarefa ID being deleted
-
   fetch(`${apiUrl}/tarefas/${tarefaId}`, {
     method: "DELETE",
     headers: {
